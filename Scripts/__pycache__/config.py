@@ -1,44 +1,23 @@
-from google_play_scraper import Sort, reviews
-import pandas as pd
-from datetime import datetime
+import os
+from dotenv import load_dotenv
 
-app = {
-    "CBE Bank": "com.combanketh.mobilebanking",
-    "Dashen Bank": "com.dashen.dashensuperapp",
-    "Abyssinia Bank":"com.boa.boaMobileBanking"
+App_IDS = {
+    'CBE': os.getenv('CBE_APP_ID', 'com.combanketh.mobilebanking'),
+    'Dashen Bank':os.getenv("DASHENBANK_APP_ID","com.dashen.dashensuperapp"),
+    "Abyssinia Bank":os.getenv("BOA_APP_ID","com.boa.boaMobileBanking")
 }
-TARGET_REVIEWS = 400
-def scrape_reviews(app_name, app_id, count):
-    """Scrape reviews for a single banking app."""
-    all_reviews = []
-    batch_size = 200
-    for start in range(0, count, batch_size):
-        result, _ = reviews(
-            app_id=app_id,
-            lang='en',
-            country='et',
-            sort=Sort.NEWEST,
-            count=batch_size,
-            filter_score_with=None,
-        )
-        for r in result:
-            all_reviews.append({
-                "review":r["content"],
-                "rating":r["score"],
-                "date":r["at"].strftime("%Y-%m-%d"),
-                "bank":app_name,
-                "source":"Google Play Store"
-            })
-    print(f"{app_name}: Collected {len(all_reviews)} reviews.")
-    return all_reviews
-final_data = []
-for app_name, app_id in app.items():
-    data = scrape_reviews(app_name, app_id, TARGET_REVIEWS)
-    final_data.extend(data)
-df = pd.DataFrame(final_data)
-df.to_csv('data/raw/reviews_raw.csv', index=False)
-print("\nSaved file: reviews_raw.csv")
-print(f"Total reviews collected: {len(data)}")
+BANK_NAME = {
+    "CBE Bank": "Commercial Bank of Ethiopia",
+    "Dashen": "Dashen Bank",
+    "Abyssinia":"Bank of Abyssinia"
+}
+SCRAPING_CONFIG = {
+    'reviews_per_bank': int(os.getenv('REVIEWS_PER_BANK', 400)),
+    'max_retries': int(os.getenv('MAX_RETRIES', 3)),
+    'lang': 'en',
+    'country': 'et'  # Ethiopia
+}
+
 DATA_PATHS = {
     'raw': 'data/raw',
     'processed': 'data/processed',
@@ -47,3 +26,4 @@ DATA_PATHS = {
     'sentiment_results': 'data/processed/reviews_with_sentiment.csv',
     'final_results': 'data/processed/reviews_final.csv'
 }
+
