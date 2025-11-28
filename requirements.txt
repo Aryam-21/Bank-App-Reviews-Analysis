@@ -1,0 +1,6 @@
+google_play_scraper
+pandas
+python-dotenv 
+tqdm 
+seaborn 
+matplotlib
