@@ -42,7 +42,7 @@ class PlayStoreScraper:
         except Exception as e:
             print(f"Error getting app info for {app_id}: {str(e)}")
             return None
-    def scrape_reviews(self, app_id, count=400):
+    def scrape_reviews(self, app_id, count=600):
         """
         Scrape reviews for a specific app.
         Attempts to fetch 'count' number of reviews, sorted by newest first.
@@ -80,16 +80,10 @@ class PlayStoreScraper:
         processed = []
         for review in reviews_data:
             processed.append({
-                'review_id': review.get('reviewId', ''),
                 'review_text': review.get('content', ''),
                 'rating': review.get('score', 0),
                 'review_date': review.get('at', datetime.now()),
-                'thumbs_up': review.get('thumbsUpCount', 0),
-                'reply_content': review.get('replyContent', None),
-                'bank_code': bank_code,
                 'bank_name': self.bank_names[bank_code],
-                'app_id': review.get('reviewCreatedVersion', 'N/A'),
-                'source': 'Google Play'
             })
         return processed
     def scrape_reviews_all(self, app_id):

@@ -47,17 +47,10 @@ class ReviewPreprocessor:
         """Ensure all required columns exist even if scraper missed some."""
 
         required_cols = [
-            "review_id",
             "review_text",
             "rating",
             "review_date",
-            "user_name",
-            "thumbs_up",
-            "reply_content",
-            "bank_code",
             "bank_name",
-            "app_id",
-            "source",
         ]
 
         for col in required_cols:
@@ -83,7 +76,7 @@ class ReviewPreprocessor:
         self.data = self.clean_columns()
         
         # Remove duplicates
-        self.data.drop_duplicates(subset=["review_id", "review_text"], keep="first", inplace=True)
+        self.data.drop_duplicates(subset=["review_text"], keep="first", inplace=True)
         
         # Clean review text
         self.data.dropna(subset=['review_text'], inplace=True)
@@ -93,11 +86,7 @@ class ReviewPreprocessor:
         self.data["rating"] = self.data["rating"].fillna(0).astype(int)
         
         # Clean bank info
-        self.data["bank_code"] = self.data["bank_code"].fillna("Unknown")
         self.data["bank_name"] = self.data["bank_name"].fillna("Unknown Bank")
-        
-        # Clean source
-        self.data["source"] = self.data["source"].fillna("Google Play")
         
         # Normalize dates
         print("✔ Normalizing review_date to YYYY-MM-DD...")
