@@ -6,7 +6,7 @@ App_IDS = {
     'Dashen Bank':os.getenv("DASHENBANK_APP_ID","com.dashen.dashensuperapp"),
     "Abyssinia Bank":os.getenv("BOA_APP_ID","com.boa.boaMobileBanking")
 }
-BANK_NAME = {
+BANK_NAMES = {
     "CBE Bank": "Commercial Bank of Ethiopia",
     "Dashen": "Dashen Bank",
     "Abyssinia":"Bank of Abyssinia"
