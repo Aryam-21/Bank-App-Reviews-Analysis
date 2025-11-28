@@ -79,29 +79,35 @@ class ReviewPreprocessor:
         return text.strip()
     def clean_data(self):
         """Clean and preprocess raw review data."""
-        #Ensure column structure
+        # Ensure column structure
         self.data = self.clean_columns()
+        
         # Remove duplicates
-        self.data = self.data.drop_duplicates(subset=["review_id", "review_text"], keep="first", inplace=True)
+        self.data.drop_duplicates(subset=["review_id", "review_text"], keep="first", inplace=True)
+        
         # Clean review text
-        self.data["review_text"] = self.data["review_text"].fillna("No review text")
+        self.data.dropna(subset=['review_text'], inplace=True)
         self.data["review_text"] = self.data["review_text"].astype(str).apply(self.remove_amharic)
+        
         # Clean numeric rating
-        self.data["rating"] = pd.to_numeric(self.data["rating"], errors="coerce").fillna(0).astype(int)
-        # Clean bank name / code
+        self.data["rating"] = self.data["rating"].fillna(0).astype(int)
+        
+        # Clean bank info
         self.data["bank_code"] = self.data["bank_code"].fillna("Unknown")
         self.data["bank_name"] = self.data["bank_name"].fillna("Unknown Bank")
+        
         # Clean source
         self.data["source"] = self.data["source"].fillna("Google Play")
+        
         # Normalize dates
         print("✔ Normalizing review_date to YYYY-MM-DD...")
         self.data["review_date"] = pd.to_datetime(self.data["review_date"], errors="coerce")
-        self.data = self.data.dropna(subset=["review_date"])
         self.data["review_date"] = self.data["review_date"].dt.strftime("%Y-%m-%d")
         self.data = self.data.dropna(subset=["review_date"])
 
         print(f"✔ Final cleaned rows: {len(self.data)}")
         return self.data
+
     def save_processed(self):
         """Save the processed clean CSV."""
         self.data.to_csv(self.output_path, index=False, encoding="utf-8")
