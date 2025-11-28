@@ -4,3 +4,9 @@ python-dotenv
 tqdm 
 seaborn 
 matplotlib
+transformers
+textblob 
+sklearn
+collections 
+re
+nltk
