@@ -84,7 +84,6 @@ class PlayStoreScraper:
                 'review_text': review.get('content', ''),
                 'rating': review.get('score', 0),
                 'review_date': review.get('at', datetime.now()),
-                'user_name': review.get('userName', 'Anonymous'),
                 'thumbs_up': review.get('thumbsUpCount', 0),
                 'reply_content': review.get('replyContent', None),
                 'bank_code': bank_code,
