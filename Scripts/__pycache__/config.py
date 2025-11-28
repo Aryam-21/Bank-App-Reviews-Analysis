@@ -7,9 +7,9 @@ App_IDS = {
     "Abyssinia Bank":os.getenv("BOA_APP_ID","com.boa.boaMobileBanking")
 }
 BANK_NAMES = {
-    "CBE Bank": "Commercial Bank of Ethiopia",
-    "Dashen": "Dashen Bank",
-    "Abyssinia":"Bank of Abyssinia"
+    "CBE": "Commercial Bank of Ethiopia",
+    "Dashen Bank": "Dashen Bank",
+    "Abyssinia Bank": "Bank of Abyssinia"
 }
 SCRAPING_CONFIG = {
     'reviews_per_bank': int(os.getenv('REVIEWS_PER_BANK', 400)),

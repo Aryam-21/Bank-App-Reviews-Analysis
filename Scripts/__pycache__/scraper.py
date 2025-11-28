@@ -93,4 +93,31 @@ class PlayStoreScraper:
                 'source': 'Google Play'
             })
         return processed
-    
+    def scrape_reviews_all(self, app_id):
+        """
+        Scrape ALL reviews for an app using reviews_all().
+         — this is an additional method.
+        """
+
+        print(f"\nScraping ALL reviews for {app_id} using reviews_all() ...") 
+        for attempt in range(self.max_retries):
+            try:
+                all_reviews = reviews_all(
+                    app_id=app_id,
+                    sleep_milliseconds=0,
+                    lang=self.lang,
+                    country=self.country
+                )
+                print(f"✔ Fetched {len(all_reviews)} total reviews")
+                limited_reviews = all_reviews[:self.reviews_per_bank]
+                print(f"✔ Returning first {len(limited_reviews)} newest reviews")
+                return limited_reviews
+            except Exception as e:
+                print(f"❌ Attempt {attempt + 1} failed: {e}")
+
+                if attempt < self.max_retries - 1:
+                    print("⏳ Retrying in 5 seconds...")
+                    time.sleep(5)
+                else:
+                    print("❌ Failed after maximum retry attempts.")
+                    return []
