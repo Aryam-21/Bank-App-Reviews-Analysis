@@ -10,3 +10,6 @@ sklearn
 collections 
 re
 nltk
+psycopg2
+wordcloud
+numpy
